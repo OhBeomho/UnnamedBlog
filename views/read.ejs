@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UnnamedBlog</title>
+	<link rel="stylesheet" href="/css/main.css">
+	<style>
+		.write-date {
+			color: darkgray;
+		}
+
+		.content {
+			text-align: left;
+			width: 100%;
+			white-space: pre-wrap;
+			word-break: break-all;
+		}
+
+		.writer {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+		}
+
+		.writer a {
+			color: black;
+		}
+
+		.writer-comment {
+			padding: 3px;
+			border-radius: 8px;
+			font-size: 10px;
+			background-color: rgb(180, 180, 255);
+			color: rgb(50, 50, 50);
+		}
+
+		.writer-comment::after {
+			content: "작성자";
+		}
+
+		#commentList {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		#commentList li {
+			padding: 0;
+			margin: 10px 0;
+			border-bottom: 0.5px solid gray;
+		}
+
+		#commentList li > div {
+			margin: 4px 0;
+		}
+
+		form {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: stretch;
+			gap: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<%- include("header.ejs") %>
+	<main>
+		<h1><%= blog.title %></h1>
+		<div style="display: flex; justify-content: space-between; align-items: center">
+			<div class="writer">
+				<img src="/images/user.png" width="25" height="25" class="user-img" alt="" />
+				<b><a href="/blog/u/<%= blog.writer.username %>"><%= blog.writer.username %></a></b>
+			</div>
+			<div class="write-date"><%= blog.writeDate.toLocaleDateString("ko-KR") %></div>
+		</div>
+		<hr />
+		<div class="content" style="min-height: 100px"><%= blog.content %></div>
+		<% if (me === blog.writer.username) { %>
+			<div>
+				<button onclick="deleteBlog()">글 삭제</button>
+				<button onclick="location.assign('/blog/update/<%= blog._id %>')">글 수정</button>
+			</div>
+		<% } %>
+		<hr />
+		<h3 style="text-align: left">댓글 목록</h3>
+		<ul id="commentList">
+			<% for (let comment of comments) { %>
+				<li>
+					<div style="display: flex; justify-content: space-between; align-items: center">
+						<div class="writer">
+							<img src="/images/user.png" width="25" height="25" class="user-img" alt="" />
+							<b><a href="/blog/u/<%= comment.writer.username %>"><%= comment.writer.username %></a></b>
+							<% if (blog.writer.username === comment.writer.username) { %>
+								<div class="writer-comment"></div>
+							<% } %>
+						</div>
+						<div class="write-date"><%= comment.writeDate.toLocaleDateString("ko-KR") %></div>
+					</div>
+					<div class="content"><%= comment.content %></div>
+				</li>
+			<% } %>
+		</ul>
+		<% if (!comments.length) { %>
+			<div>댓글이 없습니다.</div>
+		<% } %>
+		<hr />
+		<form action="/comment" method="post">
+			<h3 style="text-align: left">댓글 쓰기</h3>
+			<textarea name="content" rows="10" maxlength="1000" required></textarea><br />
+			<div><button type="submit">댓글 쓰기</button></div>
+
+			<input type="hidden" name="blogid" value="<%= blog._id %>" />
+		</form>
+	</main>
+	<%- include("footer.ejs") %>
+
+	<script>
+		function deleteBlog() {
+			if (!confirm("정말로 이 글을 삭제하시겠습니까?")) {
+				return;
+			}
+
+			const xhr = new XMLHttpRequest();
+			xhr.open("DELETE", "/blog/b/<%= blog._id %>");
+			xhr.onreadystatechange = () => {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 200) {
+						location.assign("/blog/u/<%= blog.writer.username %>");
+					} else if (xhr.status === 500) {
+						alert(typeof JSON.parse(xhr.response) === "string" ? xhr.response : "서버에서 오류가 발생하였습니다.");
+						console.error(JSON.parse(xhr.response));
+					}
+				}
+			};
+			xhr.send();
+		}
+	</script>
+</body>
+
+</html>

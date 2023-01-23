@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UnnamedBlog</title>
+	<link rel="stylesheet" href="/css/main.css">
+	<style>
+		#blogList {
+			list-style: none;
+			padding: 0;
+		}
+
+		#blogList li {
+			padding: 0;
+			margin: 4px 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-radius: 3px;
+			padding: 4px;
+			user-select: none;
+			cursor: pointer;
+			transition: all 0.15s;
+		}
+
+		#blogList li:hover {
+			box-shadow: 0 0 0 1.5px rgba(128, 128, 128, 0.5);
+		}
+	</style>
+</head>
+
+<body>
+	<%- include("header.ejs") %>
+	<main>
+		<h1>이름 없는 블로그</h1>
+		<div>
+			<div style="float: left">
+				페이지로 이동:
+				<input type="number" id="pageInput" />
+				<button onclick="gotoPage()">이동</button>
+			</div>
+			<div style="float: right">
+				<input type="search" />
+				<button id="searchButton" onclick="search()">검색</button>
+				<button onclick="location.assign('/')">검색 초기화</button>
+			</div>
+		</div>
+		<hr />
+		<ul id="blogList">
+			<% for (let blog of blogs) { %>
+				<li class="blog" onclick="location.assign('/blog/b/<%= blog._id %>')">
+					<div><b><%= blog.title %></b></div>
+					<div>
+						<span><%= blog.writer.username %></span>
+						<span style="color: var(--secondary)"><%= blog.writeDate.toLocaleDateString("ko-KR") %></span>
+					</div>
+				</li>
+			<% } %>
+			<% if (!blogs.length) { %>
+				<li class="no-blogs">글이 없습니다.</li>
+			<% } %>
+			<button id="previousPage" onclick="previousPage()">&lt;</button>
+			<button id="nextPage" onclick="nextPage()">&gt;</button>
+		</ul>
+	</main>
+	<%- include("footer.ejs") %>
+
+	<script>
+		const url = new URL(location.href);
+		const params = url.searchParams;
+		const page = Number(params.get("p")) || 1;
+		const searchText = params.get("q");
+
+		const searchInput = document.querySelector("input[type='search']");
+		const pageInput = document.getElementById("pageInput");
+
+		function nextPage() {
+			if (document.querySelector(".no-blogs")) {
+				return;
+			}
+
+			url.searchParams.set("p", page + 1);
+			location.assign(url);
+		}
+
+		function previousPage() {
+			if (page === 1) {
+				return;
+			}
+
+			page - 1 === 1 ? url.searchParams.delete("p") : url.searchParams.set("p", page - 1);
+			location.assign(url);
+		}
+
+		function gotoPage() {
+			if (!pageInput.valueAsNumber || pageInput.valueAsNumber < 1) {
+				return;
+			}
+
+			if (pageInput.valueAsNumber === 1) {
+				location.assign("/");
+				return;
+			}
+
+			url.searchParams.set("p", pageInput.valueAsNumber);
+			location.assign(url);
+		}
+
+		function search() {
+			if (!searchInput.value) {
+				return;
+			}
+
+			url.searchParams.set("q", searchInput.value);
+			location.assign(url);
+		}
+	</script>
+</body>
+
+</html>

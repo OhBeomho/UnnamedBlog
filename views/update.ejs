@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UnnamedBlog</title>
+	<link rel="stylesheet" href="/css/main.css">
+	<style>
+		form {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: stretch;
+			gap: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<%- include("header.ejs") %>
+	<main>
+		<form action="/blog" method="post">
+			<h1>글 수정하기</h1>
+			<div style="display: flex; align-items: center; gap: 8px">제목: <input type="text" name="title" style="flex: 1" value="<%= blog.title %>" required /></div>
+			<textarea name="content" rows="12" maxlength="2000" required><%= blog.content %></textarea>
+			<div><button type="submit">수정 완료</button></div>
+
+			<input type="hidden" name="blogid" value="<%= blog._id %>" />
+		</form>
+	</main>
+	<%- include("footer.ejs") %>
+</body>
+
+</html>

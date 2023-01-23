@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UnnamedBlog</title>
+	<link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+	<%- include("header.ejs") %>
+	<main>
+		<h1>사용자 정보</h1>
+		<div style="display: flex; justify-content: center; align-items: center; gap: 10px">	
+			<img src="/images/user.png" width="60" height="60" class="user-img" alt="" />
+			<div style="text-align: left">
+				<b><%= user.username %></b><br />
+				가입 날짜: <%= user.joinDate.toLocaleDateString("ko-KR") %><br />
+				글 개수: <%= blogCount %>개<br />
+				댓글 개수: <%= commentCount %>개
+			</div>
+		</div>
+		<div>
+			<button onclick="history.back()">뒤로</button>
+			<button onclick="location.assign('/logout')">로그아웃</button>
+		</div>
+	</main>
+	<%- include("footer.ejs") %>
+</body>
+
+</html>
