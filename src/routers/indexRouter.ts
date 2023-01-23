@@ -9,7 +9,7 @@ router.get("/", async (req, res, next) => {
 	const { p = 1, q = "" } = req.query;
 
 	try {
-		const blogs = await BlogModel.find(q ? { title: q } : {}).sort({ created_at: -1 }).skip((Number(p) - 1) * BLOGS_PER_PAGE).limit(BLOGS_PER_PAGE).populate<{ writer: User }>("writer");
+		const blogs = await BlogModel.find(q ? { title: q } : {}).sort({ writeDate: -1 }).skip((Number(p) - 1) * BLOGS_PER_PAGE).limit(BLOGS_PER_PAGE).populate<{ writer: User }>("writer");
 		res.render("index", { blogs });
 	} catch (e) {
 		next(e);

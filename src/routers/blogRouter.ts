@@ -80,7 +80,7 @@ router.get("/u/:username", async (req, res, next) => {
 
 	try {
 		const userID = (await UserModel.findOne({ username }).orFail(new Error(`사용자명이 ${username}인 사용자가 없습니다.`)))._id;
-		const blogs = await BlogModel.find({ writer: userID }).skip((Number(p) - 1) * BLOGS_PER_PAGE).limit(BLOGS_PER_PAGE).populate<{ writer: User }>("writer");
+		const blogs = await BlogModel.find({ writer: userID }).sort({ writeDate: -1 }).skip((Number(p) - 1) * BLOGS_PER_PAGE).limit(BLOGS_PER_PAGE).populate<{ writer: User }>("writer");
 		res.render("blog", { username, blogs });
 	} catch (e) {
 		next(e);
