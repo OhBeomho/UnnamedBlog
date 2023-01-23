@@ -68,6 +68,10 @@ a:hover {
 	text-decoration: underline;
 }
 
+textarea {
+	resize: none;
+}
+
 input,
 textarea {
 	outline: none;
@@ -75,10 +79,6 @@ textarea {
 	padding: 4px;
 	border-radius: 3px;
 	border: 0.5px solid gray;
-}
-
-textarea {
-	resize: none;
 }
 
 input:hover,
