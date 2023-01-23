@@ -62,9 +62,12 @@
 			<% if (!blogs.length) { %>
 				<li class="no-blogs">글이 없습니다.</li>
 			<% } %>
-			<button id="previousPage" onclick="previousPage()">&lt;</button>
-			<button id="nextPage" onclick="nextPage()">&gt;</button>
 		</ul>
+		<div>
+			<button id="previousPage" onclick="previousPage()">&lt;</button>
+			<span class="page"></span>
+			<button id="nextPage" onclick="nextPage()">&gt;</button>
+		</div>
 	</main>
 	<%- include("footer.ejs") %>
 
@@ -76,6 +79,8 @@
 
 		const searchInput = document.querySelector("input[type='search']");
 		const pageInput = document.getElementById("pageInput");
+
+		document.querySelector(".page").innerText = page + "페이지";
 
 		function nextPage() {
 			if (document.querySelector(".no-blogs")) {
