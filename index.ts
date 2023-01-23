@@ -18,8 +18,6 @@ declare module "express-session" {
 	}
 }
 
-connect();
-
 const app = express();
 const FileStore = sessionFileStore(session);
 const sessionMiddleware = session({
@@ -43,4 +41,4 @@ app.use("/blog", blogRouter);
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
 
-app.listen(Number(process.env.PORT), () => console.log("Listening on port " + process.env.PORT));
+connect(() => app.listen(Number(process.env.PORT), () => console.log("Listening on port " + process.env.PORT)));
