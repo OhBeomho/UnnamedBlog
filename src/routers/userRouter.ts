@@ -25,7 +25,8 @@ router.get("/", async (req, res, next) => {
 	}
 
 	try {
-		res.render("user", await findUser(req.session.user.username));
+		const { user, blogCount, commentCount } = await findUser(req.session.user.username);
+		res.render("user", { user, blogCount, commentCount, me: true });
 	} catch (e) {
 		next(e);
 	}
@@ -35,7 +36,8 @@ router.get("/:username", async (req, res, next) => {
 	const { username } = req.params;
 
 	try {
-		res.render("user", await findUser(username));
+		const { user, blogCount, commentCount } = await findUser(username);
+		res.render("user", { user, blogCount, commentCount, me: req.session.user ? user.username === req.session.user.username : false });
 	} catch (e) {
 		next(e);
 	}

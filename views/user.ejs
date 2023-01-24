@@ -24,7 +24,9 @@
 		</div>
 		<div>
 			<button onclick="history.back()">뒤로</button>
-			<button onclick="location.assign('/logout')">로그아웃</button>
+			<% if (me) { %>
+				<button onclick="location.assign('/logout')">로그아웃</button>
+			<% } %>
 		</div>
 	</main>
 	<%- include("footer.ejs") %>
