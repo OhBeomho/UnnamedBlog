@@ -79,8 +79,10 @@
 			<div class="write-date"><%= blog.writeDate.toLocaleDateString("ko-KR") %></div>
 		</div>
 		<hr />
-		<% if (file) { %>
-			<img src="data:<%= fileType %>;base64,<%= Buffer.from(file).toString("base64") %>" alt="" />
+		<% if (fileContent && fileType) { %>
+			<img src="data:<%= fileType %>;base64,<%= Buffer.from(fileContent).toString("base64") %>" alt="" />
+		<% } else if (!fileContent && fileType) { %>
+			<span style="color: gray; user-select: none;">이미지를 불러올 수 없습니다.</span>
 		<% } %>
 		<div class="content" style="margin: 10px 0; min-height: 100px"><%= blog.content %></div>
 		<% if (me === blog.writer.username) { %>

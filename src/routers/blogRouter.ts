@@ -69,11 +69,16 @@ router.route("/b/:blogid")
 				.orFail(new Error(`ID가 ${blogid}인 글이 없습니다.`));
 			const comments = await Promise.all(blog.comments.map((comment) => CommentModel.findById(comment).populate<{ writer: User }>("writer").exec()));
 
+			let fileContent;
+			if (blog.file && fs.existsSync(blog.file)) {
+				fileContent = fs.readFileSync(blog.file);
+			}
+
 			res.render("read", {
 				me: req.session.user?.username,
 				blog,
 				comments,
-				file: blog.file ? fs.readFileSync(blog.file) : undefined,
+				fileContent,
 				fileType: blog.fileType
 			});
 		} catch (e) {
