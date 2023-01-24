@@ -3,6 +3,7 @@ import express from "express";
 import session from "express-session";
 import mongoose from "mongoose";
 import sessionFileStore from "session-file-store";
+import cors from "cors";
 import { connect } from "./src/db/database";
 import indexRouter from "./src/routers/indexRouter";
 import blogRouter from "./src/routers/blogRouter";
@@ -35,6 +36,7 @@ app.use(sessionMiddleware);
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/blog", blogRouter);

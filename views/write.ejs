@@ -21,10 +21,11 @@
 <body>
 	<%- include("header.ejs") %>
 	<main>
-		<form action="/blog" method="post">
+		<form action="/blog" method="post" enctype="multipart/form-data">
 			<h1>글쓰기</h1>
 			<div style="display: flex; align-items: center; gap: 8px">제목: <input type="text" name="title" style="flex: 1" required /></div>
 			<textarea name="content" rows="12" maxlength="2000" required></textarea>
+			<div>파일 첨부: <input type="file" name="image" accept="image/jpg, image/jpeg, image/png, image/gif" /> <button onclick="document.querySelector(`input[type='file']`).value = ''">파일 제거</button></div>
 			<div><button type="submit">글쓰기</button></div>
 		</form>
 	</main>

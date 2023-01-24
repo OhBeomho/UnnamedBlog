@@ -18,7 +18,9 @@ const blogSchema = new Schema({
 		type: String,
 		required: true
 	},
-	comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }]
+	comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+	file: String,
+	fileType: String
 });
 
 export interface Blog {
@@ -26,7 +28,9 @@ export interface Blog {
 	writeDate: Date,
 	writer: Schema.Types.ObjectId,
 	content: string,
-	comments: Schema.Types.ObjectId[]
+	comments: Schema.Types.ObjectId[],
+	file: string,
+	fileType: string
 }
 
 export const BlogModel = model("Blog", blogSchema);

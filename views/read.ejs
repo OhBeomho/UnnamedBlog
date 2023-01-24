@@ -79,7 +79,10 @@
 			<div class="write-date"><%= blog.writeDate.toLocaleDateString("ko-KR") %></div>
 		</div>
 		<hr />
-		<div class="content" style="min-height: 100px"><%= blog.content %></div>
+		<% if (file) { %>
+			<img src="data:<%= fileType %>;base64,<%= Buffer.from(file).toString("base64") %>" alt="" />
+		<% } %>
+		<div class="content" style="margin: 10px 0; min-height: 100px"><%= blog.content %></div>
 		<% if (me === blog.writer.username) { %>
 			<div>
 				<button onclick="deleteBlog()">글 삭제</button>
